@@ -1,34 +1,61 @@
+"""
+Восьмиричные числа не превышающие 2048 в 10. Выводит на экран нечетные числа, использующие не менее К разных цифр.
+Список используемых цифр выводится отдельно прописью.
+"""
 def count_number(num):
     return len(str(num))
-def oct_odd(limit):
+def oct_odd(numbers):
     oct_mass = []
-    for i in range(1, limit):
-        oct_num = oct(i)[2:]
-        if int(oct_num) % 2 != 0:
-            oct_mass.append(oct_num)
+    for i in numbers:
+        if i % 2 != 0 and i <= 2048:
+            if i >= 0:
+                oct_mass.append(oct(i)[2:])
+            else:
+                oct_mass.append(oct(i)[:1]+oct(i)[3:])
+
     return oct_mass
 
 def mass_filter(mass, k):
     result = []
     for i in mass:
-        if count_number(i) >= k:
+        if count_number(abs(int(i))) >= k:
             result.append(i)
     return result
 
-def used_num(filtred):
+def used_num(filtred, numerals):
     unique_list = set()
     for i in filtred:
-        unique_list.update(set(str(i)))
-    return unique_list
+        unique_list.update(set(str(abs(int(i)))))
+    print(f"Нечетные числа с не менее чем {k} цифр в них в 8-ой степени: {filtred}")
+    print(f"\nСписок использованных уникальных цифр: ", end='')
+    for i in unique_list:
+        print(f"[{numerals.get(int(i))}]", end=' ')
+
+def read_file():
+    numbers = []
+    file = open('text.txt', 'r')
+    symbol = file.read(1)
+    str_num = ''
+    while symbol:
+        if symbol == '-':
+            str_num = ''
+            str_num += '-'
+        elif symbol.isdigit():
+            str_num += symbol
+        else:
+            numbers.append(str_num)
+            str_num = ''
+        symbol = file.read(1)
+
+    print(f"Список всех распознанных 10-ых чисел: {numbers}")
+    return list(map(int, numbers))
+
+
 
 if __name__ == "__main__":
-    k = int(input("Введите число из-за которого будут выводиться числа, содержащие не менее цифр этого числа: "))
-    limit = 2048
-    mass = oct_odd(limit)
-    filtred = mass_filter(mass, k)
-    unique_list = used_num(filtred)
-    print(f"Нечетные числа с не менее чем {k} цифр в них:")
-    for i in filtred:
-        print(i)
-
-    print(f"\nСписок использованных уникальных цифр: {unique_list}")
+    numerals = {0: 'ноль', 1: 'один', 2: 'два', 3: 'три', 4: 'четыре', 5: 'пять', 6: 'шесть', 7: 'семь', 8: 'восемь', 9: 'девять'}
+    numbers = read_file()
+    k = int(input("\nВведите число k выводящее не менее k цифр в числе: "))
+    oct_mass = oct_odd(numbers)
+    filtred = mass_filter(oct_mass, k)
+    used_num(filtred, numerals)
