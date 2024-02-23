@@ -53,9 +53,26 @@ def read_file():
 
 
 if __name__ == "__main__":
-    numerals = {0: 'ноль', 1: 'один', 2: 'два', 3: 'три', 4: 'четыре', 5: 'пять', 6: 'шесть', 7: 'семь', 8: 'восемь', 9: 'девять'}
-    numbers = read_file()
-    k = int(input("\nВведите число k выводящее не менее k цифр в числе: "))
-    oct_mass = oct_odd(numbers)
-    filtred = mass_filter(oct_mass, k)
-    used_num(filtred, numerals)
+    numerals = {0: 'ноль', 1: 'один', 2: 'два', 3: 'три', 4: 'четыре', 5: 'пять', 6: 'шесть', 7: 'семь', 8: 'восемь',9: 'девять'}
+    con = True
+    while con:
+        numbers = read_file()
+        while True:
+            try:
+                k = int(input("\nВведите число k выводящее не менее k цифр в числе: "))
+                break
+            except ValueError:
+                print("\tВведено не число. Попробуйте ещё раз!")
+        oct_mass = oct_odd(numbers)
+        filtred = mass_filter(oct_mass, k)
+        used_num(filtred, numerals)
+        while True:
+            try:
+                val = int(input("\n\nХотите выполнить программу ещё раз?\n1. Да \n2. Нет \nОтвет: "))
+                if val == 1:
+                    break
+                elif val == 2:
+                    con = False
+                    break
+            except ValueError:
+                print("\tВведено не число. Попробуйте ещё раз!")
