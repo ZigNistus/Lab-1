@@ -33,30 +33,42 @@ def used_num(filtred, numerals):
 
 def read_file():
     numbers = []
-    file = open('text.txt', 'r')
-    symbol = file.read(1)
-    str_num = ''
-    while symbol:
-        if symbol == '-':
-            str_num = ''
-            str_num += '-'
-        elif symbol.isdigit():
-            str_num += symbol
-        else:
-            numbers.append(str_num)
-            str_num = ''
-        symbol = file.read(1)
-
-    print(f"Список всех распознанных 10-ых чисел: {numbers}")
-    return list(map(int, numbers))
-
-
+    while True:
+        try:
+            with open("text.txt", 'r') as file:
+                symbol = file.read(1)
+                str_num = ''
+                count = 0
+                while symbol:
+                    str_num += symbol
+                    if str_num == '-':
+                        count += 1
+                    if str_num.isdigit():
+                        count += 2
+                    if not str_num.lstrip("-").isdigit():
+                        if count > 1:
+                            str_num = str_num[:-1]
+                            numbers.append(str_num)
+                            str_num = ''
+                            count = 0
+                        elif count == 1:
+                            count += 1
+                        else:
+                            str_num = ''
+                    symbol = file.read(1)
+            print(f"Список всех распознанных 10-ых чисел: {numbers}")
+            return list(map(int, numbers))
+        except FileNotFoundError:
+            print('Файла text.txt пустой.\nДобавьте не пустой файл в директорию или переименуйте существующий!')
+            return False
 
 if __name__ == "__main__":
-    numerals = {0: 'ноль', 1: 'один', 2: 'два', 3: 'три', 4: 'четыре', 5: 'пять', 6: 'шесть', 7: 'семь', 8: 'восемь',9: 'девять'}
+    numerals = {0: 'ноль', 1: 'один', 2: 'два', 3: 'три', 4: 'четыре', 5: 'пять', 6: 'шесть', 7: 'семь', 8: 'восемь', 9: 'девять'}
     con = True
     while con:
         numbers = read_file()
+        if not numbers:
+            break
         while True:
             try:
                 k = int(input("\nВведите число k выводящее не менее k цифр в числе: "))
