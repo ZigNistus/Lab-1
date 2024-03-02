@@ -12,6 +12,7 @@ def oct_odd(numbers):
                 oct_mass.append(oct(i)[2:])
             else:
                 oct_mass.append(oct(i)[:1]+oct(i)[3:])
+    print(f"\nСписок из 8-ных нечетных числе {oct_mass}\n")
     return oct_mass
 
 def mass_filter(mass, k):
