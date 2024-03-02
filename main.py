@@ -12,13 +12,20 @@ def oct_odd(numbers):
                 oct_mass.append(oct(i)[2:])
             else:
                 oct_mass.append(oct(i)[:1]+oct(i)[3:])
-
     return oct_mass
 
 def mass_filter(mass, k):
     result = []
     for i in mass:
-        if count_number(abs(int(i))) >= k:
+        str = i
+        count = 0
+        tmp = set()
+        for j in str.lstrip("-"):
+            if j in tmp:
+              count += 1
+            else:
+                tmp.add(j)
+        if count < count_number(abs(int(i))) - k + 1 and count_number(abs(int(i))) >= k:
             result.append(i)
     return result
 
@@ -26,7 +33,7 @@ def used_num(filtred, numerals):
     unique_list = set()
     for i in filtred:
         unique_list.update(set(str(abs(int(i)))))
-    print(f"Нечетные числа с не менее чем {k} цифр в них в 8-ой степени: {filtred}")
+    print(f"Числа удовлетворяющие условию с не менее {k} разных цифр в них в 8-ой степени: {filtred}")
     print(f"\nСписок использованных уникальных цифр: ", end='')
     for i in unique_list:
         print(f"[{numerals.get(int(i))}]", end=' ')
@@ -71,7 +78,7 @@ if __name__ == "__main__":
             break
         while True:
             try:
-                k = int(input("\nВведите число k выводящее не менее k цифр в числе: "))
+                k = int(input("\nВведите число k выводящее не менее k разных цифр в числе: "))
                 break
             except ValueError:
                 print("\tВведено не число. Попробуйте ещё раз!")
